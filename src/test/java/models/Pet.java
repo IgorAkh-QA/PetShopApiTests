@@ -9,7 +9,7 @@ public class Pet {
     private String name;
     private Category category;
     private List<String> photoUrls;
-    private List<org.junit.jupiter.api.Tag> tags;
+    private List<String> tags;
     private String status;
 
     public int getId() {
@@ -44,11 +44,11 @@ public class Pet {
         this.photoUrls = photoUrls;
     }
 
-    public List<org.junit.jupiter.api.Tag> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<org.junit.jupiter.api.Tag> tags) {
+    public void setTags(List<String>tags) {
         this.tags = tags;
     }
 
