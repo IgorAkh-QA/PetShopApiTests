@@ -109,7 +109,7 @@ public class TestPet {
     @CsvSource({
             "581, Pes, available",
             "582, Kot, pending",
-            "583, Ryba, sold",
+            "583, Ryba, sold"
     })
     @Feature("Pet")
     @Severity(SeverityLevel.CRITICAL)
