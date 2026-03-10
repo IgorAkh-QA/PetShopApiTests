@@ -9,6 +9,8 @@ import io.restassured.response.Response;
 import models.Pet;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
@@ -101,5 +103,40 @@ public class TestPet {
                 assertEquals("Pet not found", responseBody,
                         "Текст ошибки не совпал с ожидаемым. Получен: " + responseBody)
         );
+    }
+
+    @ParameterizedTest(name = "Добавление питомца со статусом: {2}")
+    @CsvSource({
+            "581, Pes, available",
+            "582, Kot, pending",
+            "583, Ryba, sold",
+    })
+    @Feature("Pet")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("Qakhmet")
+    @Tag("API")
+    public void testAddNewPet(int id, String name, String status){
+        Pet pet = new Pet();
+        pet.setName(name);
+        pet.setId(id);
+        pet.setStatus(status);
+        Response response = step("Отправить POST- запрос на добавление нового питомца", () ->
+            given()
+                    .contentType(ContentType.JSON)
+                    .header("Accept", "application/json")
+                    .body(pet)
+                    .when()
+                    .post(BASE_URL + "/pet"));
+        String responseBody = response.getBody().asString();
+
+        step("Проверить, что статус- код ответа == 200", ()->
+                assertEquals(200,response.getStatusCode(), "Код ответа не совпал с ожидаемыем. Ответ: " + responseBody));
+
+        step("Проверка параметров созданного питомца", ()-> {
+            Pet createdPet = response.as(Pet.class);
+            assertEquals(pet.getId(),createdPet.getId(), "id питомца не совпадает с ожидаемым");
+            assertEquals(pet.getName(),createdPet.getName(), "Name питомца не совпадает с ожидаемым");
+            assertEquals(pet.getStatus(),createdPet.getStatus(), "Status питомца не совпадает с ожидаемым");
+               });
     }
 }
