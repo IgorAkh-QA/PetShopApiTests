@@ -25,7 +25,6 @@ public class TestPet {
     @Tag("API")
     public void testDeleteNonexistentPet() {
         Response response = step("Отправить DELETE запрос на удаление несуществующего питомца", () ->
-                //Response response = given()  при помещении создания параметра в лямбда- функцию, ругается
                 given()
                         .contentType(ContentType.JSON)
                         .header("Accept", "application/json")
@@ -57,13 +56,39 @@ public class TestPet {
         pet.setStatus("available");
 
         Response response = step("Отправить PUT запрос на изменение несуществующего питомца", () ->
-                //Response response = given()  при помещении создания параметра в лямбда- функцию, ругается
                 given()
                         .contentType(ContentType.JSON)
                         .header("Accept", "application/json")
                         .body(pet)
                         .when()
                         .put(BASE_URL + "/pet"));
+
+        String responseBody = response.getBody().asString();
+
+        step("Проверить, что статус- код ответа == 404", () ->
+                assertEquals(404, response.getStatusCode(),
+                        "Код ответа не совпал с ожидаемым. Ответ: " + responseBody)
+        );
+
+        step("Проверить, что текст ответа 'Pet not found'", () ->
+                assertEquals("Pet not found", responseBody,
+                        "Текст ошибки не совпал с ожидаемым. Получен: " + responseBody)
+        );
+    }
+
+    @Test
+    @Feature("Pet")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("Qakhmet")
+    @Tag("API")
+    public void testGetNonExistentPetById(){
+
+        Response response = step("Отправить GET запрос на поиск несуществующего питомца", () ->
+                given()
+                        .contentType(ContentType.JSON)
+                        .header("Accept", "application/json")
+                        .when()
+                        .get(BASE_URL + "/pet/9999"));
 
         String responseBody = response.getBody().asString();
 
