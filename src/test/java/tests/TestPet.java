@@ -19,12 +19,12 @@ public class TestPet {
     private static final String BASE_URL = "http://5.181.109.28:9090/api/v3";
 
     @Test
-    @Feature("models.Pet")
+    @Feature("Pet")
     @Severity(SeverityLevel.CRITICAL)
     @Owner("Qakhmet")
     @Tag("API")
     public void testDeleteNonexistentPet() {
-        Response response = step("Отправить DELETE запрос на удаление несущствующего models.Pet", () ->
+        Response response = step("Отправить DELETE запрос на удаление несуществующего питомца", () ->
                 //Response response = given()  при помещении создания параметра в лямбда- функцию, ругается
                 given()
                         .contentType(ContentType.JSON)
@@ -46,7 +46,7 @@ public class TestPet {
     }
 
     @Test
-    @Feature("models.Pet")
+    @Feature("Pet")
     @Severity(SeverityLevel.CRITICAL)
     @Owner("Qakhmet")
     @Tag("API")
@@ -56,7 +56,7 @@ public class TestPet {
         pet.setName("Non-existent Pet");
         pet.setStatus("available");
 
-        Response response = step("Отправить PUT запрос на изменение несуществующего models.Pet", () ->
+        Response response = step("Отправить PUT запрос на изменение несуществующего питомца", () ->
                 //Response response = given()  при помещении создания параметра в лямбда- функцию, ругается
                 given()
                         .contentType(ContentType.JSON)
